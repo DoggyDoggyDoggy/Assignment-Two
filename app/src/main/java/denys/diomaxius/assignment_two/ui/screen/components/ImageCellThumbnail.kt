@@ -3,14 +3,11 @@ package denys.diomaxius.assignment_two.ui.screen.components
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -33,11 +30,7 @@ fun ImageCellThumbnail(
 
     Card(modifier = Modifier.size(sizeDp)) {
         val bmp = bitmapState.value
-        if (bmp == null) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("…")
-            }
-        } else {
+        if (bmp != null) {
             Image(
                 bitmap = bmp.asImageBitmap(),
                 contentDescription = null,
