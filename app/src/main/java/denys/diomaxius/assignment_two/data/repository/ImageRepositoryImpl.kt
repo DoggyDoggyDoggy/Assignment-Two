@@ -4,13 +4,12 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import androidx.annotation.RequiresApi
 import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
 import kotlinx.coroutines.Dispatchers
@@ -41,18 +40,43 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
         uris
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     override suspend fun loadThumbnail(
         uri: Uri,
-        width: Int,
-        height: Int,
+        reqWidth: Int,
+        reqHeight: Int
     ): Bitmap? = withContext(Dispatchers.IO) {
         try {
-            resolver.loadThumbnail(uri, android.util.Size(width, height), null)
+            val options = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            context.contentResolver.openInputStream(uri).use { input ->
+                BitmapFactory.decodeStream(input, null, options)
+            }
+
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+
+            options.inJustDecodeBounds = false
+            context.contentResolver.openInputStream(uri).use { input ->
+                BitmapFactory.decodeStream(input, null, options)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
+    }
+
+    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val (height: Int, width: Int) = options.run { outHeight to outWidth }
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            var halfHeight = height / 2
+            var halfWidth = width / 2
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
     }
 
     override fun scanPictures() {
