@@ -1,4 +1,4 @@
-package denys.diomaxius.assignment_two.ui.screen
+package denys.diomaxius.assignment_two.ui.screen.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
