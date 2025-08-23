@@ -57,7 +57,9 @@ fun GalleryScreen(
 
     Scaffold(
         topBar = {
-            TopBar()
+            TopBar(
+                scanPictures = viewModel::scanPictures,
+            )
         }
     ) { innerPadding ->
         Content(
