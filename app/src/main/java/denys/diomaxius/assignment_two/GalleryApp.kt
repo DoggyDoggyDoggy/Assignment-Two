@@ -1,4 +1,8 @@
 package denys.diomaxius.assignment_two
 
-class GalleryApp {
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class GalleryApp : Application() {
 }
