@@ -3,9 +3,9 @@ package denys.diomaxius.assignment_two.ui.screen.components
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
@@ -17,26 +17,29 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ImageCellThumbnail(
+    modifier: Modifier = Modifier,
     uri: Uri,
-    sizeDp: Dp = 120.dp,
+    sizeDp: Dp = 100.dp,
     loadThumbnail: suspend (Uri, Int, Int) -> Bitmap?,
 ) {
     val density = LocalDensity.current
-
     val bitmapState = produceState<Bitmap?>(initialValue = null, key1 = uri) {
-        val px = with(density) { sizeDp.roundToPx() }
-        value = loadThumbnail(uri, px, px)
+        val sizePx = with(density) { sizeDp.roundToPx() }
+        value = loadThumbnail(uri, sizePx, sizePx)
     }
 
-    Card(modifier = Modifier.size(sizeDp)) {
-        val bmp = bitmapState.value
-        if (bmp != null) {
-            Image(
-                bitmap = bmp.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+    val bmp = bitmapState.value
+
+    if (bmp != null){
+        Image(
+            bitmap = bmp.asImageBitmap(),
+            contentDescription = null,
+            modifier = modifier,
+            contentScale = ContentScale.Crop
+        )
+    } else {
+        Box(modifier = modifier) {
+            CircularProgressIndicator()
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Scaffold
@@ -22,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.ui.screen.components.ImageCellThumbnail
@@ -77,12 +79,16 @@ fun Content(
     viewModel: GalleryScreenViewModel,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize()
     ) {
         items(images.size) { index ->
             ImageCellThumbnail(
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(1.dp),
                 uri = images[index].uri,
+                sizeDp = 100.dp,
                 loadThumbnail = viewModel::loadThumbnail
             )
         }
