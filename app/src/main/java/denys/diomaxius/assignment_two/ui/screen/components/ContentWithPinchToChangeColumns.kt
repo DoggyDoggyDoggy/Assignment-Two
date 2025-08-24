@@ -12,11 +12,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.sqrt
+
+fun distance(p0: Offset, p1: Offset): Float {
+    val dx = p0.x - p1.x
+    val dy = p0.y - p1.y
+    return kotlin.math.sqrt(dx * dx + dy * dy)
+}
+
+fun safeZoom(zoom: Float): Float =
+    if (zoom.isFinite() && !zoom.isNaN() && zoom > 0f) zoom else 1f
 
 @Composable
 fun ContentWithPinchToChangeColumns(
@@ -32,6 +41,18 @@ fun ContentWithPinchToChangeColumns(
     val zoomInThreshold = 1.80f
     val zoomOutThreshold = 0.20f
     val debounceDistance = 2f
+
+    fun maybeUpdateColumns(accum: Float) {
+        if (accum > zoomInThreshold) {
+            val next = max(minColumns, columns - 1)
+            if (next != columns) columns = next
+            accumScale = 1f
+        } else if (accum < zoomOutThreshold) {
+            val next = min(maxColumns, columns + 1)
+            if (next != columns) columns = next
+            accumScale = 1f
+        }
+    }
 
     Box(
         modifier = modifier
@@ -51,28 +72,14 @@ fun ContentWithPinchToChangeColumns(
                         if (pressed.size >= 2) {
                             pressed.forEach { it.consume() }
 
-                            val p0 = pressed[0].position
-                            val p1 = pressed[1].position
-
-                            val dx = p0.x - p1.x
-                            val dy = p0.y - p1.y
-                            val dist = sqrt(dx * dx + dy * dy)
+                            val dist = distance(pressed[0].position, pressed[1].position)
 
                             prevDistance?.let { prev ->
                                 if (kotlin.math.abs(dist - prev) >= debounceDistance) {
-                                    val zoom = if (prev > 0f) dist / prev else 1f
-                                    val safeZoom = if (zoom.isFinite() && !zoom.isNaN() && zoom > 0f) zoom else 1f
-                                    accumScale *= safeZoom
+                                    val zoom = safeZoom(if (prev > 0f) dist / prev else 1f)
+                                    accumScale *= zoom
 
-                                    if (accumScale > zoomInThreshold) {
-                                        val next = max(minColumns, columns - 1)
-                                        if (next != columns) columns = next
-                                        accumScale = 1f
-                                    } else if (accumScale < zoomOutThreshold) {
-                                        val next = min(maxColumns, columns + 1)
-                                        if (next != columns) columns = next
-                                        accumScale = 1f
-                                    }
+                                    maybeUpdateColumns(accumScale)
                                 }
                             }
 
