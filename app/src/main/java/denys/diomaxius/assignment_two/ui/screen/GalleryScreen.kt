@@ -59,6 +59,7 @@ fun GalleryScreen(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         hasMediaPermission = granted
+        if (granted) viewModel.loadImages()
     }
 
     LaunchedEffect(Unit) {

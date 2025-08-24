@@ -23,13 +23,9 @@ class GalleryScreenViewModel @Inject constructor(
     private val _images = MutableStateFlow<List<ImageItem>>(emptyList())
     val images = _images.asStateFlow()
 
-    init {
-        loadImages()
-    }
-
     fun scanPictures() = mediaScannerUseCase()
 
-    private fun loadImages() = viewModelScope.launch {
+    fun loadImages() = viewModelScope.launch {
         _images.value = getImageUrisUseCase()
     }
 
