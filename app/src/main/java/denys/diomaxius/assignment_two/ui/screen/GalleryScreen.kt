@@ -65,7 +65,7 @@ fun GalleryScreen(
     LaunchedEffect(Unit) {
         if (!hasMediaPermission) {
             permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-        }
+        } else viewModel.loadImages()
     }
 
     Scaffold(
