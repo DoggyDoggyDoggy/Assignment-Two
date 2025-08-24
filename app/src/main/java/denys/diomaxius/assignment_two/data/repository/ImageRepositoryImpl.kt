@@ -54,8 +54,8 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
             }
 
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
-
             options.inJustDecodeBounds = false
+
             context.contentResolver.openInputStream(uri).use { input ->
                 BitmapFactory.decodeStream(input, null, options)
             }
