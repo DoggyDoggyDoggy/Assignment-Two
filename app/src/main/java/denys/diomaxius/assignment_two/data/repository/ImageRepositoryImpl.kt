@@ -5,16 +5,12 @@ import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     private val resolver: ContentResolver get() = context.contentResolver
@@ -77,23 +73,5 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
             }
         }
         return inSampleSize
-    }
-
-    //Redundant
-    override fun scanPictures() {
-        val picturesDir = File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES
-        ), "")
-        val files = picturesDir.listFiles { f -> f.extension.equals("jpg", ignoreCase = true) }
-
-        files?.forEach { file ->
-            MediaScannerConnection.scanFile(
-                context,
-                arrayOf(file.absolutePath),
-                arrayOf("image/jpeg")
-            ) { path, uri ->
-                Log.d("Scanner", "Indexed: $path -> $uri")
-            }
-        }
     }
 }
