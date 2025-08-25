@@ -62,6 +62,7 @@ fun GalleryScreen(
     Scaffold(
         topBar = {
             TopBar(
+                // Redundant
                 scanPictures = viewModel::scanPictures,
             )
         }
