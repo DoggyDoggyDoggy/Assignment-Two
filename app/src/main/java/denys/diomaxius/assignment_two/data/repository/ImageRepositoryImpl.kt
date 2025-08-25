@@ -79,6 +79,7 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
         return inSampleSize
     }
 
+    //Redundant
     override fun scanPictures() {
         val picturesDir = File(Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES
