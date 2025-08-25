@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +29,6 @@ import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.ui.screen.components.ContentWithPinchToChangeColumns
 import denys.diomaxius.assignment_two.ui.screen.components.ImageCellThumbnail
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun GalleryScreen(
     viewModel: GalleryScreenViewModel = hiltViewModel(),
@@ -38,11 +36,18 @@ fun GalleryScreen(
     val context = LocalContext.current
     val images by viewModel.images.collectAsState()
 
+    val mediaPermission =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            Manifest.permission.READ_MEDIA_IMAGES
+        else
+            Manifest.permission.READ_EXTERNAL_STORAGE
+
+
     var hasMediaPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
                 context,
-                Manifest.permission.READ_MEDIA_IMAGES
+                mediaPermission
             ) == PackageManager.PERMISSION_GRANTED
         )
     }
@@ -55,9 +60,8 @@ fun GalleryScreen(
     }
 
     LaunchedEffect(Unit) {
-        if (!hasMediaPermission) {
-            permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-        } else viewModel.loadImages()
+        if (!hasMediaPermission) permissionLauncher.launch(mediaPermission)
+        else viewModel.loadImages()
     }
 
     Scaffold(
