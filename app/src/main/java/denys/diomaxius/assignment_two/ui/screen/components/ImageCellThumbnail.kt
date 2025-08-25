@@ -15,13 +15,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun ImageCellThumbnail(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     uri: Uri,
-    sizeDp: Dp = 100.dp,
+    sizeDp: Dp,
     loadThumbnail: suspend (Uri, Int, Int) -> Bitmap?,
 ) {
     val density = LocalDensity.current
