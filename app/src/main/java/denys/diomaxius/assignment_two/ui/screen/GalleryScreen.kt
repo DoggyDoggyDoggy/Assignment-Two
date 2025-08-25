@@ -6,9 +6,10 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Scaffold
@@ -89,8 +90,9 @@ fun Content(
             items(images.size) { index ->
                 ImageCellThumbnail(
                     modifier = Modifier
-                        .size(100.dp)
-                        .padding(1.dp),
+                        .padding(1.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
                     uri = images[index].uri,
                     sizeDp = 100.dp,
                     loadThumbnail = viewModel::loadThumbnail
