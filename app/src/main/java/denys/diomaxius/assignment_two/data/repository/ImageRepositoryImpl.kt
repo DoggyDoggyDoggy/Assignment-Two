@@ -15,7 +15,6 @@ import kotlinx.coroutines.withContext
 
 class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     private val resolver: ContentResolver get() = context.contentResolver
-
     private val thumbnailCache: LruCache<String, Bitmap>
 
     init {
