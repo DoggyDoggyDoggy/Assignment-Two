@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.LruCache
 import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,19 @@ import kotlinx.coroutines.withContext
 
 class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     private val resolver: ContentResolver get() = context.contentResolver
+
+    private val thumbnailCache: LruCache<String, Bitmap>
+
+    init {
+        val maxMemoryKb = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+        val cacheSizeKb = maxMemoryKb / 8
+
+        thumbnailCache = object : LruCache<String, Bitmap>(cacheSizeKb) {
+            override fun sizeOf(key: String, value: Bitmap): Int {
+                return value.byteCount / 1024
+            }
+        }
+    }
 
     override suspend fun loadImageUris(): List<ImageItem> = withContext(Dispatchers.IO) {
         val uris = mutableListOf<ImageItem>()
@@ -41,6 +55,10 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
         reqWidth: Int,
         reqHeight: Int
     ): Bitmap? = withContext(Dispatchers.IO) {
+        val key = "${uri}_${reqWidth}_${reqHeight}"
+
+        thumbnailCache.get(key)?.let { return@withContext it }
+
         try {
             val options = BitmapFactory.Options().apply {
                 inJustDecodeBounds = true
@@ -52,9 +70,12 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
             options.inJustDecodeBounds = false
 
-            context.contentResolver.openInputStream(uri).use { input ->
+            val bitmap = context.contentResolver.openInputStream(uri).use { input ->
                 BitmapFactory.decodeStream(input, null, options)
             }
+
+            bitmap?.let { thumbnailCache.put(key, it) }
+            bitmap
         } catch (e: Exception) {
             e.printStackTrace()
             null
