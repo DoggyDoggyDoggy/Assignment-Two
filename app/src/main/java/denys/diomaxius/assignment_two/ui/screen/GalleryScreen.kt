@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import denys.diomaxius.assignment_two.ui.screen.components.TopBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +30,7 @@ import denys.diomaxius.assignment_two.ui.screen.components.ImageCellThumbnail
 
 @Composable
 fun GalleryScreen(
-    viewModel: GalleryScreenViewModel = hiltViewModel(),
+    viewModel: GalleryScreenViewModel
 ) {
     val context = LocalContext.current
     val images by viewModel.images.collectAsState()
