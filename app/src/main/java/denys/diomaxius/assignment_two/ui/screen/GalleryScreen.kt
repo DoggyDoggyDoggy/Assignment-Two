@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -82,18 +83,21 @@ fun Content(
     images: List<ImageItem>,
     viewModel: GalleryScreenViewModel,
 ) {
-    ContentWithPinchToChangeColumns {
+    ContentWithPinchToChangeColumns { columns, prevColumns ->
         LazyVerticalGrid(
-            columns = GridCells.Fixed(it),
+            columns = GridCells.Fixed(columns),
             modifier = modifier.fillMaxSize()
         ) {
-            items(images.size) { index ->
+           items(
+               items = images,
+               key = { it.id }
+           ) { image ->
                 ImageCellThumbnail(
                     modifier = Modifier
                         .padding(1.dp)
                         .fillMaxWidth()
                         .aspectRatio(1f),
-                    uri = images[index].uri,
+                    uri = image.uri,
                     sizeDp = 100.dp,
                     loadThumbnail = viewModel::loadThumbnail
                 )
