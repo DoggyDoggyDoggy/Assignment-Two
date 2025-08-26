@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import denys.diomaxius.assignment_two.ui.screen.GalleryScreen
-import denys.diomaxius.assignment_two.ui.screen.GalleryScreenViewModel
+import denys.diomaxius.assignment_two.ui.screen.gallery.GalleryScreen
+import denys.diomaxius.assignment_two.ui.screen.gallery.GalleryScreenViewModel
 import denys.diomaxius.assignment_two.ui.theme.Assignment_twoTheme
 
 @AndroidEntryPoint

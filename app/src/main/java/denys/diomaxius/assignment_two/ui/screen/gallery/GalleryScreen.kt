@@ -1,4 +1,4 @@
-package denys.diomaxius.assignment_two.ui.screen
+package denys.diomaxius.assignment_two.ui.screen.gallery
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import denys.diomaxius.assignment_two.ui.screen.components.TopBar
+import denys.diomaxius.assignment_two.ui.screen.gallery.components.TopBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,8 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import denys.diomaxius.assignment_two.domain.model.ImageItem
-import denys.diomaxius.assignment_two.ui.screen.components.ContentWithPinchToChangeColumns
-import denys.diomaxius.assignment_two.ui.screen.components.ImageCellThumbnail
+import denys.diomaxius.assignment_two.ui.screen.gallery.components.ContentWithPinchToChangeColumns
+import denys.diomaxius.assignment_two.ui.screen.gallery.components.ImageCellThumbnail
 
 @Composable
 fun GalleryScreen(

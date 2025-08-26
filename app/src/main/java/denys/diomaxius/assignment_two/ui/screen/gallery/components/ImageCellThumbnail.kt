@@ -1,4 +1,4 @@
-package denys.diomaxius.assignment_two.ui.screen.components
+package denys.diomaxius.assignment_two.ui.screen.gallery.components
 
 import android.graphics.Bitmap
 import android.net.Uri
