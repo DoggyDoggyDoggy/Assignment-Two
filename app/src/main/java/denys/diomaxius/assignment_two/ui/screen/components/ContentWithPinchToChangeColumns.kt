@@ -9,7 +9,6 @@ import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,17 +26,12 @@ fun ContentWithPinchToChangeColumns(
     minColumns: Int = 1,
     maxColumns: Int = 6,
     initialColumns: Int = 3,
-    content: @Composable (columns: Int, prevColumns: Int) -> Unit,
+    content: @Composable (columns: Int) -> Unit,
 ) {
     var columns by rememberSaveable {
         mutableStateOf(
             initialColumns.coerceIn(minColumns, maxColumns)
         )
-    }
-    var prevColumns by remember { mutableStateOf(columns) }
-
-    LaunchedEffect(columns) {
-        prevColumns = columns
     }
 
     var zoom by remember { mutableStateOf(1f) }
@@ -79,6 +73,6 @@ fun ContentWithPinchToChangeColumns(
                 }
             }
     ) {
-        content(columns, prevColumns)
+        content(columns)
     }
 }
