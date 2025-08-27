@@ -24,7 +24,7 @@ fun PinchToZoom(
     var offsetY by remember { mutableStateOf(0f) }
 
     val minScale = 1f
-    val maxScale = 6f
+    val maxScale = 12f
 
     // Remember the initial offset
     var initialOffset by remember { mutableStateOf(Offset(0f, 0f)) }
