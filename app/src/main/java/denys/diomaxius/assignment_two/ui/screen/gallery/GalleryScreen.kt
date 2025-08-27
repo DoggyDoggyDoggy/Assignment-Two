@@ -5,8 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -79,7 +77,6 @@ fun GalleryScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
@@ -95,20 +92,16 @@ fun Content(
                 items = images,
                 key = { it.id }
             ) { image ->
-                Box(
+                ImageCellThumbnail(
                     modifier = Modifier
                         .padding(1.dp)
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .animateItem()
-                ) {
-                    ImageCellThumbnail(
-                        modifier = Modifier.fillMaxSize(),
-                        uri = image.uri,
-                        sizeDp = 100.dp,
-                        loadThumbnail = viewModel::loadThumbnail
-                    )
-                }
+                        .animateItem(),
+                    uri = image.uri,
+                    sizeDp = 100.dp,
+                    loadThumbnail = viewModel::loadThumbnail
+                )
             }
         }
     }

@@ -33,7 +33,7 @@ fun ImageCellThumbnail(
 
     Box(
         modifier = modifier
-    ) {
+    ){
         AnimatedVisibility(
             visible = bmp != null,
             enter = scaleIn(tween(200))
