@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
-fun PinchToZoomView(
+fun PinchToZoom(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {

@@ -20,7 +20,7 @@ fun PhotoScreen(uri: String) {
 
     val bmp = bitmapState.value
 
-    PinchToZoomView{
+    PinchToZoom{
         if (bmp != null) {
             Image(
                 bitmap = bmp.asImageBitmap(),
