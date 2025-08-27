@@ -10,6 +10,8 @@ import android.provider.MediaStore
 import android.util.LruCache
 import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
+import denys.diomaxius.assignment_two.utils.applyExifRotation
+import denys.diomaxius.assignment_two.utils.calculateInSampleSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -73,25 +75,13 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
                 BitmapFactory.decodeStream(input, null, options)
             }
 
-            bitmap?.let { thumbnailCache.put(key, it) }
-            bitmap
+            val rotated = bitmap?.let { applyExifRotation(context, uri, it) }
+
+            rotated?.let { thumbnailCache.put(key, it) }
+            rotated
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
-    }
-
-    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
-        val (height: Int, width: Int) = options.run { outHeight to outWidth }
-        var inSampleSize = 1
-
-        if (height > reqHeight || width > reqWidth) {
-            var halfHeight = height / 2
-            var halfWidth = width / 2
-            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
-                inSampleSize *= 2
-            }
-        }
-        return inSampleSize
     }
 }
