@@ -97,7 +97,7 @@ fun Content(
             ) { image ->
                 ImageCellThumbnail(
                     modifier = Modifier
-                        .padding(1.dp)
+                        .padding(2.dp)
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .animateItem(),
