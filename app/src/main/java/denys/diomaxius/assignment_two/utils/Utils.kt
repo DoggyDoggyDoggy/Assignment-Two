@@ -29,7 +29,11 @@ fun applyExifRotation(context: Context, uri: Uri, bitmap: Bitmap): Bitmap {
     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 }
 
-fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+fun calculateInSampleSize(
+    options: BitmapFactory.Options,
+    reqWidth: Int,
+    reqHeight: Int,
+): Int {
     val (height: Int, width: Int) = options.run { outHeight to outWidth }
     var inSampleSize = 1
 

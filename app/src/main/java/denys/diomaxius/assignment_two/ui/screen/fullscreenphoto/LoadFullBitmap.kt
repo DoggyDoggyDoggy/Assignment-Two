@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.net.toUri
 import denys.diomaxius.assignment_two.utils.applyExifRotation
+import denys.diomaxius.assignment_two.utils.calculateInSampleSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -13,12 +14,26 @@ suspend fun loadFullBitmap(context: Context, uriString: String): Bitmap? =
         try {
             val uri = uriString.toUri()
 
-            val bitmap = context.contentResolver.openFileDescriptor(uri, "r")?.use {
-                BitmapFactory.decodeFileDescriptor(
-                    it.fileDescriptor,
-                    null,
-                    BitmapFactory.Options()
-                )
+            val options = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            context.contentResolver.openInputStream(uri)?.use {
+                BitmapFactory.decodeStream(it, null, options)
+            }
+
+            val displayMetrics = context.resources.displayMetrics
+            val reqWidth = displayMetrics.widthPixels
+            val reqHeight = displayMetrics.heightPixels
+
+            val sampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+
+            val finalOptions = BitmapFactory.Options().apply {
+                inSampleSize = sampleSize
+                inScaled = false
+            }
+
+            val bitmap = context.contentResolver.openInputStream(uri)?.use {
+                BitmapFactory.decodeStream(it, null, finalOptions)
             }
 
             bitmap?.let { applyExifRotation(context, uri, it) }
