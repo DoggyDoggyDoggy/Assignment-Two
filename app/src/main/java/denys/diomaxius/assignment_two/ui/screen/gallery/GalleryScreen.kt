@@ -1,6 +1,7 @@
 package denys.diomaxius.assignment_two.ui.screen.gallery
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -72,7 +73,8 @@ fun GalleryScreen(
         Content(
             modifier = Modifier.padding(innerPadding),
             images = images,
-            viewModel = viewModel
+            viewModel = viewModel,
+            context = context
         )
     }
 }
@@ -82,6 +84,7 @@ fun Content(
     modifier: Modifier = Modifier,
     images: List<ImageItem>,
     viewModel: GalleryScreenViewModel,
+    context: Context,
 ) {
     ContentWithPinchToChangeColumns { columns ->
         LazyVerticalGrid(
@@ -98,6 +101,7 @@ fun Content(
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .animateItem(),
+                    context = context,
                     uri = image.uri,
                     sizeDp = 100.dp,
                     loadThumbnail = viewModel::loadThumbnail
