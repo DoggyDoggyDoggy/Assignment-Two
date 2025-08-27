@@ -15,7 +15,7 @@ fun PhotoScreen(uri: String) {
     val context = LocalContext.current
 
     val bitmapState = produceState<Bitmap?>(initialValue = null, uri) {
-        value = loadFullBitmapViaBitmapFactory(context, uri)
+        value = loadFullBitmap(context, uri)
     }
 
     val bmp = bitmapState.value

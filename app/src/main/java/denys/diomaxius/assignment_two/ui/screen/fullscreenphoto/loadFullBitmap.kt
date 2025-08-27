@@ -7,7 +7,7 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-suspend fun loadFullBitmapViaBitmapFactory(context: Context, uriString: String): Bitmap? =
+suspend fun loadFullBitmap(context: Context, uriString: String): Bitmap? =
     withContext(Dispatchers.IO) {
         try {
             val uri = uriString.toUri()
