@@ -1,6 +1,5 @@
 package denys.diomaxius.assignment_two.ui.screen.fullscreenphoto
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,13 +24,13 @@ fun PinchToZoom(
     var offsetY by remember { mutableStateOf(0f) }
 
     val minScale = 1f
-    val maxScale = 4f
+    val maxScale = 6f
 
     // Remember the initial offset
     var initialOffset by remember { mutableStateOf(Offset(0f, 0f)) }
 
     // Coefficient for slowing down movement
-    val slowMovement = 0.5f
+    val slowMovement = 0.3f
 
     // Box composable containing the image
     Box(
@@ -68,20 +67,6 @@ fun PinchToZoom(
                         initialOffset = Offset(offsetX, offsetY)
                     }
                 }
-            }
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onDoubleTap = {
-                        // Reset scale and offset on double tap
-                        if (scale != 1f) {
-                            scale = 1f
-                            offsetX = initialOffset.x
-                            offsetY = initialOffset.y
-                        } else {
-                            scale = 2f
-                        }
-                    }
-                )
             }
             .graphicsLayer {
                 scaleX = scale
