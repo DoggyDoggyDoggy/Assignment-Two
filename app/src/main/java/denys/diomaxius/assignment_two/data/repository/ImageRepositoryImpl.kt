@@ -37,6 +37,11 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
         }
     }
 
+    override suspend fun clearThumbnailCache() = withContext(Dispatchers.IO) {
+        Log.i("ClearCache", "start clear")
+        thumbnailCache.evictAll()
+    }
+
     //Reads all the pictures from the phone and returns list of pictures.
     //Default path for images.
     override suspend fun loadImageUris(): List<ImageItem> = withContext(Dispatchers.IO) {

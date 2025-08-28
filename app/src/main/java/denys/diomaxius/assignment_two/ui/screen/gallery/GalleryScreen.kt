@@ -68,7 +68,9 @@ fun GalleryScreen(
 
     Scaffold(
         topBar = {
-            TopBar()
+            TopBar(
+                onClick = viewModel::clearThumbnailCache
+            )
         }
     ) { innerPadding ->
         Content(
