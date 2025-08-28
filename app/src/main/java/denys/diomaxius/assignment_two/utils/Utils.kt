@@ -8,7 +8,7 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 
-
+//Check metadata orientation. Rotate image if needed.
 fun applyExifRotation(context: Context, uri: Uri, bitmap: Bitmap): Bitmap {
     val inputStream = context.contentResolver.openInputStream(uri)
     val exif = inputStream?.use { ExifInterface(it) }
@@ -29,6 +29,7 @@ fun applyExifRotation(context: Context, uri: Uri, bitmap: Bitmap): Bitmap {
     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 }
 
+//Reducing the size of the image
 fun calculateInSampleSize(
     options: BitmapFactory.Options,
     reqWidth: Int,

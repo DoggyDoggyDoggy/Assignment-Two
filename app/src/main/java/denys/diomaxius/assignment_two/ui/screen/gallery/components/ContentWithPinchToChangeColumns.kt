@@ -20,6 +20,9 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.roundToInt
 
+//The logic and behavior of changing the number of columns in LazyVerticalGrid
+// was taken from the application shown in the game matching game.
+// https://github.com/a159x36/Examples336/blob/main/MatchingGridViewModel/app/src/main/java/nz/ac/massey/examples336/matchinggrid/ui/GameUi.kt
 @Composable
 fun ContentWithPinchToChangeColumns(
     modifier: Modifier = Modifier,

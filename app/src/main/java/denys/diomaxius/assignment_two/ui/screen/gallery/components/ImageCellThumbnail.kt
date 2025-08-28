@@ -20,6 +20,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import denys.diomaxius.assignment_two.PhotoActivity
 
+//Show Thumbnail depending on phone screen density.
+//The animation is the same as shown in the video for the assessment
 @Composable
 fun ImageCellThumbnail(
     modifier: Modifier,

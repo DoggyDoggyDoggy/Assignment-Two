@@ -30,6 +30,7 @@ import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.ui.screen.gallery.components.ContentWithPinchToChangeColumns
 import denys.diomaxius.assignment_two.ui.screen.gallery.components.ImageCellThumbnail
 
+//Gallery screen. Runtime permission request occurs here
 @Composable
 fun GalleryScreen(
     viewModel: GalleryScreenViewModel,
@@ -99,8 +100,8 @@ fun Content(
                     modifier = Modifier
                         .padding(2.dp)
                         .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .animateItem(),
+                        .aspectRatio(1f) // square image
+                        .animateItem(), //Shuffle animation when changing the number of columns
                     context = context,
                     uri = image.uri,
                     sizeDp = 100.dp,

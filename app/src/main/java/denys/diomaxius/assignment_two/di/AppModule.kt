@@ -10,9 +10,12 @@ import denys.diomaxius.assignment_two.data.repository.ImageRepositoryImpl
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
 import javax.inject.Singleton
 
+//DI
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    //Returns the repository implementation. Can be changed to another implementation
     @Provides
     @Singleton
     fun provideImageRepository(@ApplicationContext context: Context): ImageRepository =

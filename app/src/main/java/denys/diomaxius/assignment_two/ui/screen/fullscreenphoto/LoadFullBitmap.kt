@@ -9,6 +9,8 @@ import denys.diomaxius.assignment_two.utils.calculateInSampleSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+//Loads the image based on the phone screen size. The image will not be of maximum quality.
+//But much better than thumbnails. At maximum quality, the memory overflow error occurs
 suspend fun loadFullBitmap(context: Context, uriString: String): Bitmap? =
     withContext(Dispatchers.IO) {
         try {

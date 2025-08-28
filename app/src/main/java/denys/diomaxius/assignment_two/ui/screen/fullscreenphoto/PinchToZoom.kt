@@ -13,6 +13,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 
+//Implementation of image zooming
+//Taken from this author https://medium.com/globant/implementing-pinch-to-zoom-in-jetpack-compose-dc824155e313
+//I just increased the maximum zoom and removed the double tap function
 @Composable
 fun PinchToZoom(
     modifier: Modifier = Modifier,
@@ -32,7 +35,6 @@ fun PinchToZoom(
     // Coefficient for slowing down movement
     val slowMovement = 0.3f
 
-    // Box composable containing the image
     Box(
         modifier = modifier
             .fillMaxSize()

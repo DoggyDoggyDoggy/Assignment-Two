@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import denys.diomaxius.assignment_two.ui.screen.fullscreenphoto.PhotoScreen
 
+//Activity for single photo screen
 class PhotoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,6 +5,7 @@ import android.net.Uri
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
 import javax.inject.Inject
 
+//UseCase, which is optional in this case, simply serves as an additional layer between the ViewModel and the repository.
 class LoadThumbnailUseCase @Inject constructor(
     private val imageRepository: ImageRepository,
 ) {

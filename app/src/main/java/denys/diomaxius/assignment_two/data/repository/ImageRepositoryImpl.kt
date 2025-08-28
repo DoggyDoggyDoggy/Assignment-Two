@@ -19,6 +19,8 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     private val resolver: ContentResolver get() = context.contentResolver
     private val thumbnailCache: LruCache<String, Bitmap>
 
+    //Basic settings for working with memory.
+    // Allocates memory for the application
     init {
         val maxMemoryKb = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         val cacheSizeKb = maxMemoryKb / 8
@@ -30,6 +32,8 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
         }
     }
 
+    //Reads all the pictures from the phone and returns list of pictures.
+    //Default path for images.
     override suspend fun loadImageUris(): List<ImageItem> = withContext(Dispatchers.IO) {
         val uris = mutableListOf<ImageItem>()
         val collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -51,6 +55,9 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
         uris
     }
 
+    //Tries to read/get thumbnails from memory.
+    //If there are none in memory, creates a new thumbnail and saves it to memory.
+    //Returns thumbnails
     override suspend fun loadThumbnail(
         uri: Uri,
         reqWidth: Int,
