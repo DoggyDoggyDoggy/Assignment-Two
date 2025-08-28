@@ -38,7 +38,7 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     }
 
     override suspend fun clearThumbnailCache() = withContext(Dispatchers.IO) {
-        Log.i("ClearCache", "start clear")
+        Log.i("Cache", "Clear Cache")
         thumbnailCache.evictAll()
     }
 
@@ -79,7 +79,10 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
 
                 val key = "${uri}_${reqWidth}_${reqHeight}"
 
-                thumbnailCache.get(key)?.let { return@withContext it }
+                thumbnailCache.get(key)?.let {
+                    Log.i("Cache", "Took photo from cache")
+                    return@withContext it
+                }
 
                 try {
                     val options = BitmapFactory.Options().apply {
@@ -98,7 +101,10 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
 
                     val rotated = bitmap?.let { applyExifRotation(context, uri, it) }
 
-                    rotated?.let { thumbnailCache.put(key, it) }
+                    rotated?.let {
+                        thumbnailCache.put(key, it)
+                        Log.i("Cache", "Put photo to cache")
+                    }
 
                     Log.d("ThumbPerf", "end decode $uri size=${rotated?.width}x${rotated?.height}")
 
