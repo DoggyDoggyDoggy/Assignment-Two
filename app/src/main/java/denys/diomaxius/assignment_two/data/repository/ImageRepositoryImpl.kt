@@ -16,6 +16,18 @@ import denys.diomaxius.assignment_two.utils.calculateInSampleSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/*
+ Took the cache storage code, as shown in the Google guide.
+ When I tested the application and looked at the logs,
+ I realized that the cache size could be increased.
+ Also, when I looked at the performance and how loadThumbnail works,
+ I thought that I could use Semaphore or another method limiting the number of threads/tasks.
+ So that not all the images would immediately crash into the loadThumbnail function.
+ And there would be a loading queue.
+ I'm not sure that complex optimization for this application is needed for the assessment, so I removed it.
+* */
+
+
 class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     private val resolver: ContentResolver get() = context.contentResolver
     private val thumbnailCache: LruCache<String, Bitmap>
