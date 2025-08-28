@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.util.LruCache
 import denys.diomaxius.assignment_two.domain.model.ImageItem
 import denys.diomaxius.assignment_two.domain.repository.ImageRepository
@@ -14,10 +15,14 @@ import denys.diomaxius.assignment_two.utils.applyExifRotation
 import denys.diomaxius.assignment_two.utils.calculateInSampleSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
 class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     private val resolver: ContentResolver get() = context.contentResolver
     private val thumbnailCache: LruCache<String, Bitmap>
+
+    private val decodeSemaphore = Semaphore(2)
 
     //Basic settings for working with memory.
     // Allocates memory for the application
@@ -61,34 +66,42 @@ class ImageRepositoryImpl(private val context: Context) : ImageRepository {
     override suspend fun loadThumbnail(
         uri: Uri,
         reqWidth: Int,
-        reqHeight: Int
-    ): Bitmap? = withContext(Dispatchers.IO) {
-        val key = "${uri}_${reqWidth}_${reqHeight}"
+        reqHeight: Int,
+    ): Bitmap? =
+        decodeSemaphore.withPermit {
+            withContext(Dispatchers.IO) {
+                Log.d("ThumbPerf", "start decode $uri on ${Thread.currentThread().name}")
 
-        thumbnailCache.get(key)?.let { return@withContext it }
+                val key = "${uri}_${reqWidth}_${reqHeight}"
 
-        try {
-            val options = BitmapFactory.Options().apply {
-                inJustDecodeBounds = true
+                thumbnailCache.get(key)?.let { return@withContext it }
+
+                try {
+                    val options = BitmapFactory.Options().apply {
+                        inJustDecodeBounds = true
+                    }
+                    context.contentResolver.openInputStream(uri).use { input ->
+                        BitmapFactory.decodeStream(input, null, options)
+                    }
+
+                    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+                    options.inJustDecodeBounds = false
+
+                    val bitmap = context.contentResolver.openInputStream(uri).use { input ->
+                        BitmapFactory.decodeStream(input, null, options)
+                    }
+
+                    val rotated = bitmap?.let { applyExifRotation(context, uri, it) }
+
+                    rotated?.let { thumbnailCache.put(key, it) }
+
+                    Log.d("ThumbPerf", "end decode $uri size=${rotated?.width}x${rotated?.height}")
+
+                    rotated
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
             }
-            context.contentResolver.openInputStream(uri).use { input ->
-                BitmapFactory.decodeStream(input, null, options)
-            }
-
-            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
-            options.inJustDecodeBounds = false
-
-            val bitmap = context.contentResolver.openInputStream(uri).use { input ->
-                BitmapFactory.decodeStream(input, null, options)
-            }
-
-            val rotated = bitmap?.let { applyExifRotation(context, uri, it) }
-
-            rotated?.let { thumbnailCache.put(key, it) }
-            rotated
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
-    }
 }
