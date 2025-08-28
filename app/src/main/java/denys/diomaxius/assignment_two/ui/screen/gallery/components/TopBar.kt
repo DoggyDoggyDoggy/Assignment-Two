@@ -11,12 +11,14 @@ import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
+fun TopBar(
+    onClick:() -> Unit
+) {
     TopAppBar(
         title = { Text("Gallery") },
         actions = {
             IconButton(
-                onClick = { }
+                onClick = { onClick() }
             ) {
                 Icon(
                     imageVector = Icons.Default.Refresh,
