@@ -16,6 +16,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 //Implementation of image zooming
 //Taken from this author https://medium.com/globant/implementing-pinch-to-zoom-in-jetpack-compose-dc824155e313
 //I just increased the maximum zoom and removed the double tap function
+//Added the content parameter so that I can forward an image.
+//In the implementation via transformable(),
+// it was either impossible to move the image when zooming in,
+// or it was possible to move it beyond the phone screen.
 @Composable
 fun PinchToZoom(
     modifier: Modifier = Modifier,
